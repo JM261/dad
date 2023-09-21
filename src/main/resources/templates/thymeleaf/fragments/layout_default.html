@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<title>스터디박스</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, maximum-scale=1.0, minimum-scale=1.0" charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="Keywords" content="" />
+	<meta name="author" content="" />
+	<meta name="robots" content="all" />
+	<meta name="formnat-detection" content="telephone=no, address=no, email=no" />
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="context-path" th:content="@{/}"/>
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+	
+	<link rel="shortcut icon" th:href="@{/stu_res/ico/favicon.ico}" type="image/x-icon">
+	<link rel="icon" th:href="@{/stu_res/ico/favicon.ico}" type="image/x-icon">
+	<link rel="apple-touch-icon" href="@{/stu_res/ico/favicon.ico}" />
+	<link rel="apple-touch-startup-image" href="@{/stu_res/ico/favicon.ico}" />
+	<!-- <link rel="manifest" href="@{/manifest.json}" />  -->
+	
+	<!-- contents css -->
+	<th:block layout:fragment="css">
+	</th:block>
+	
+	<!-- css -->
+	<link rel="stylesheet" th:href="@{/com_res/js/jquery-ui/jquery-ui.css}"/>
+	<link rel="stylesheet" th:href="@{/com_res/js/datetimepicker/jquery.datetimepicker.css}"/>
+	<link rel="stylesheet" th:href="@{/com_res/css/style_global.css}"/>
+	<link rel="stylesheet" th:href="@{/stu_res/css/style_user.css}"/>
+	<link rel="stylesheet" th:href="@{/com_res/js/sweetalert2/sweetalert.css}"/>
+	<link rel="stylesheet" th:href="@{/com_res/js/slick/slick.css}"/>
+<!-- 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" /> -->
+			
+	<!-- ------------------------------ java script ------------------------------ -->
+	<script th:src="@{/com_res/js/jquery-3.5.1.min.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/imagesloaded.pkgd.min.js}" type="text/javascript" ></script>
+	
+	<script th:src="@{/com_res/js/jquery.form.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/json/json2.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/sweetalert2/sweetalert.min.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/compressor/compressor.min.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/slick/slick.min.js}" type="text/javascript" ></script>
+
+	<script th:src="@{/com_res/js/js_global.js}" type="text/javascript" ></script>
+	<script th:src="@{/stu_res/js/js_user.js}" type="text/javascript"></script>
+	<script th:src="@{/com_res/js/datetimepicker/jquery.datetimepicker.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/highcharts/js/highcharts.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/highcharts/js/highcharts-more.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/html2canvas.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/js_page_css.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/common.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/jquery-ui/jquery-ui.js}" type="text/javascript" ></script>
+	<script th:src="@{/com_res/js/jquery.ui.touch-punch.min.js}" type="text/javascript" ></script>
+	<script th:src="@{/stu_res/js/global_state.js}" type="text/javascript" ></script>
+	<script th:src="@{/stu_res/js/sky_common.js}" type="text/javascript" ></script>
+	<script th:src="@{/stu_res/js/grading.js}" type="text/javascript" ></script>
+	<script th:src="@{/stu_res/js/stu_ajax.js}" type="text/javascript" ></script>
+	<script th:src="@{/stu_res/js/learningRange.js}" type="text/javascript" ></script>
+	<script th:inline="javascript"> var contextRoot = /*[[@{/}]]*/ ''; </script>
+	
+	<link rel="stylesheet" th:href="@{/com_res/js/rangeslider/rangeslider.css}"/>
+	<script th:src="@{/com_res/js/rangeslider/rangeslider.min.js}" type="text/javascript" ></script>
+</head>
+<body>
+	<script>
+	
+	$(document).ready(function() {
+		var responseMessage = "[[${message}]]";
+		var topTitle = "[[${topTitle}]]";
+		if((topTitle != null) && (topTitle != "")){
+			$("#topTitle").text(topTitle);
+		}
+		if((responseMessage != null) && (responseMessage != "")){
+			var message = responseMessage.replace(/&quot;/g, '"');
+			message = JSON.parse(message);
+			if(message.status == 'success')
+				DqgSwal.fire({icon: 'success', title:message.title, text:message.body});
+			else if(message.status == 'info')
+				DqgSwal.fire({icon: 'info', title:message.title, text:message.body});
+			else if(message.status == 'warning')
+				DqgSwal.fire({icon: 'warning', title:message.title, text:message.body});
+			else if(message.status == 'error')
+				DqgSwal.fire({icon: 'error', title:message.title, text:message.body});
+		}
+		warningAlert = (alertMsg) => {
+			let alertTitle = "[[${#messages.msg('title.warning')}]]";
+			DqgSwal.fire({icon: 'warning', title:alertTitle, text:alertMsg});
+		}
+		errorAlert = (alertMsg) => {
+			let alertTitle = "[[${#messages.msg('title.error')}]]";
+			DqgSwal.fire({icon: 'warning', title:alertTitle, text:alertMsg});
+		}  
+		successAlert = (alertMsg) => {
+			let alertTitle = "[[${#messages.msg('title.info')}]]";
+			DqgSwal.fire({icon: 'info', title:alertTitle, text:alertMsg});
+		}
+	});
+	</script>
+	<!-- contents -->
+	<div class="wrapper" th:classappend="${classType}">
+		<th:block th:replace="thymeleaf/fragments/layout_top :: topFragment"></th:block>
+		<th:block th:replace="thymeleaf/fragments/layout_left :: leftFragment"></th:block>
+		<th:block layout:fragment="contents">
+		</th:block>
+	</div>
+	<!-- //container -->
+	<th:block layout:fragment="js">
+
+	</th:block>
+</body>
+</html>

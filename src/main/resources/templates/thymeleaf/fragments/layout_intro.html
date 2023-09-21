@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<title>Discuss And Decide</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, maximum-scale=1.0, minimum-scale=1.0" charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="Keywords" content="" />
+	<meta name="author" content="" />
+	<meta name="robots" content="all" />
+	<meta name="formnat-detection" content="telephone=no, address=no, email=no" />
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="context-path" th:content="@{/}"/>
+	<link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
+	<!-- contents css -->
+	<th:block layout:fragment="css">
+	</th:block>
+	
+	<!-- css -->
+	<script th:inline="javascript"> var contextRoot = /*[[@{/}]]*/ ''; </script>
+</head>
+<body>
+	<script>
+	
+// 	$(document).ready(function() {
+// 		var responseMessage = "[[${message}]]";
+
+// 		if((responseMessage != null) && (responseMessage != "")){
+// 			var message = responseMessage.replace(/&quot;/g, '"');
+// 			message = JSON.parse(message);
+// 			if(message.status == 'success')
+// 				DqgSwal.fire({icon: 'success', title:message.title, text:message.body});
+// 			else if(message.status == 'info')
+// 				DqgSwal.fire({icon: 'info', title:message.title, text:message.body});
+// 			else if(message.status == 'warning')
+// 				DqgSwal.fire({icon: 'warning', title:message.title, text:message.body});
+// 			else if(message.status == 'error')
+// 				DqgSwal.fire({icon: 'error', title:message.title, text:message.body});
+// 		}    
+// 	});
+	</script>
+	<!-- contents -->
+	<div class="wrapper" th:classappend="${classType}">
+		<th:block layout:fragment="contents"></th:block>
+		<th:block th:replace="thymeleaf/fragments/layout_footer :: footerFragment"></th:block>
+	</div>
+	<!-- //container -->
+	<th:block layout:fragment="js">
+	</th:block>
+</body>
+</html>

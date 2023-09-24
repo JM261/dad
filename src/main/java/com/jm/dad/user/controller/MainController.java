@@ -12,7 +12,7 @@ public class MainController {
 	@GetMapping("/")
 	public ModelAndView MainController(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("thymeleaf/main");
-		System.out.println("test1");
+		System.out.println("test2");
 		return mav;
 	}
 	

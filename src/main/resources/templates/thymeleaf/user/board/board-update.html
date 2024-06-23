@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{thymeleaf/fragments/layout_default}">
+<th:block layout:fragment="contents">
+
+	<div class="container">
+		
+		<h3>등록</h3>
+		
+		<form id="updateForm" th:object="${updateForm}">
+		  	<div>
+				<input type="text" th:field="*{title}" placeholder="제목" maxlength="10">
+		  	</div>
+		  	<div>
+				<input type="password" th:field="*{pwd}" placeholder="패스워드" maxlength="10">
+		  	</div>
+		  	<div>
+				<textarea name="bio" placeholder="내용" aria-label="Professional short bio"></textarea>
+		  	</div>
+			<div class="grid">
+			  	<button type="button" id="">등록 및 수정</button>
+			</div>
+		</form>
+	</div>
+	
+</th:block>
+<th:block layout:fragment="js">
+<script th:inline="javascript">
+	
+	document.addEventListener('DOMContentLoaded', function () {
+
+	});
+	
+</script>
+</th:block>
+</html>

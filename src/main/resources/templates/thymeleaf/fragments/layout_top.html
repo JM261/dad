@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="topFragment">
+<!-- top -->
+<header>
+	<h2 class="text-center">Discuss And Decide</h2>
+	<nav>
+  		<ul>
+		  
+	  	</ul>
+	  	<ul>
+		    <li><a href="/">목록</a></li>
+	 		<li><a href="/board">등록</a></li>
+		    <li><a href="/privacy">설정</a></li>
+		    <li><a href="#" id="logoutBtn">로그아웃</a></li>
+	  	</ul>
+	  	<ul>
+	  	</ul>
+	</nav>
+</header>
+<script>
+	
+	document.addEventListener('DOMContentLoaded', function () {
+		
+		let logoutBtn = document.getElementById('logoutBtn'); // 로그아웃 버튼 
+		
+		logoutBtn.addEventListener('click', function () {
+			
+			location.replace("/logout");
+		});
+	});
+	
+</script>
+</th:block>
+</html>

@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{thymeleaf/fragments/layout_intro}">
+<th:block layout:fragment="contents">
 
-</body>
+	<dialog open>
+	  <article>
+	    <header>
+		      <p>
+		        <strong th:text="|${status} ERROR|"></strong>
+		      </p>
+	    </header>
+	    <p>
+	      요청하신 결과를 찾을 수 없습니다.
+	    </p>
+	    <ul>
+			
+		</ul>
+	    <button id="reMainBtn" aria-label="Close" rel="prev">메인으로</button>
+	  </article>
+	</dialog>
+	
+</th:block>
+<th:block layout:fragment="js">
+<script th:inline="javascript">
+	
+	document.addEventListener('DOMContentLoaded', function () {
+	
+		const reMainBtn = document.getElementById('reMainBtn'); // 메인으로 버튼
+		
+		reMainBtn.addEventListener('click', function () {
+			location.replace('/');
+		});
+	});
+
+</script>
+</th:block>
 </html>

@@ -8,7 +8,7 @@ group = 'com.jm.dad'
 version = '0.0.1'
 
 java {
-	sourceCompatibility = '11'
+	sourceCompatibility = '17'
 }
 
 configurations {
@@ -29,23 +29,28 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	//implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
-	//implementation 'org.springframework.session:spring-session-jdbc'
-	//implementation 'org.springframework.session:spring-session-core'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'jakarta.platform:jakarta.jakartaee-api:9.0.0'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.hibernate:hibernate-core:5.5.6'
+    implementation 'org.eclipse.persistence:eclipselink:2.7.7'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.apache.commons:commons-lang3:3.9'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-	//implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.1'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 	implementation 'com.google.code.gson:gson:2.8.6'
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-	implementation group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.0'
 	implementation group: 'com.github.pagehelper', name: 'pagehelper', version: '3.2.3'
 	implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
 	implementation group: 'org.apache.poi', name: 'poi', version: '5.0.0'
@@ -54,6 +59,7 @@ dependencies {
 	implementation 'com.google.firebase:firebase-admin:7.1.0'
 	implementation 'com.jcraft:jsch:0.1.55'
 	compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {

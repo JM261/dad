@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{thymeleaf/fragments/layout_intro}">
+<th:block layout:fragment="contents">
+
+	<h2 class="text-center">Discuss And Decide</h2>
+	
+	<div class="container">
+		
+		<h3>회원가입</h3>
+		
+		<form id="joinForm" name="joinForm" th:object="${joinForm}" method="post">
+			<div class="grid">
+				<label>
+					<input type="text" id="username" name="username" oninput="inpCnvId(this)" placeholder="아이디" aria-invalid="true" maxlength="30">
+				</label>
+				<label>
+					<button type="button" id="idDuplChkBtn" class="secondary">아이디 중복확인</button>
+				</label>
+		  	</div>
+		  	<div>
+				<input type="password" id="pwd" name="pwd" placeholder="패스워드" maxlength="20">
+		  	</div>
+		  	<div>
+				<input type="password" id="pwdChk" name="pwdChk" placeholder="패스워드 확인" maxlength="20">
+		  	</div>
+		  	<div>
+				<input type="text" id="name" name="name" placeholder="이름" maxlength="10">
+		  	</div>
+		  	<div>
+				<input type="text" id="nickname" name="nickname" placeholder="닉네임" maxlength="25">
+		  	</div>
+		  	<div>
+				<input type="text" id="phone" name="phone" oninput="onlyNumber(this)" placeholder="연락처 ex) 01012345678" maxlength="15">
+		  	</div>
+		  	<div>
+				 <input type="text" id="birthday" name="birthday" oninput="onlyNumber(this)" placeholder="생년월일 ex) 19911231" maxlength="8"> 
+		  	</div>
+		  	<div>
+				<input type="text" id="email" name="email" placeholder="이메일" maxlength="200">
+		  	</div>
+		
+		  	<button type="button" id="joinExecBtn">가입하기</button>
+		</form>
+	</div>
+	
+</th:block>
+<th:block layout:fragment="js">
+<script th:inline="javascript">
+	
+let idVaild = false;
+
+	document.addEventListener('DOMContentLoaded', function () {
+
+		const idDuplChkBtn = document.getElementById('idDuplChkBtn'); // 아이디 중복확인 버튼
+		const joinExecBtn = document.getElementById('joinExecBtn'); // 회원가입 버튼
+		
+		const userId = document.getElementById('username');
+		const pwd = document.getElementById('pwd');
+		const pwdChk = document.getElementById('pwdChk');
+		const name = document.getElementById('name');
+		const nickname = document.getElementById('nickname');
+		const phone = document.getElementById('phone');
+		const birthday = document.getElementById('birthday');
+		const email = document.getElementById('email');
+		
+		joinExecBtn.addEventListener('click', function () {
+			
+			if (joinValidation()) {
+				
+				let form = document.getElementById('joinForm');
+				 
+				let formData = new FormData(form);
+				
+			    let xhr = new XMLHttpRequest();
+			
+			    xhr.onreadystatechange = function () {
+			    	if (xhr.readyState === XMLHttpRequest.DONE) {
+		            	if (xhr.status === 200) {
+							alert("회원가입이 완료되었습니다.");
+				        	location.replace("/login");
+			            } else if (xhr.status === 400) { // 잘못 된 요청 (입력 값 유효성 체크 중 오류 발생)
+							alert(xhr.responseText);
+						} else { // 400 이외의 에러 발생
+							alert("ERROR : " + xhr.responseText);
+			            }
+			        }
+			    }
+			    
+			    xhr.open("POST", '/join', true);
+			    
+			    xhr.send(formData);				
+			}
+		});
+	   
+	    idDuplChkBtn.addEventListener('click', function () { // 중복확인 버튼 클릭
+	    
+	    	let pass = userId.getAttribute('readonly');
+	    	
+	    	if (pass === null) {
+			    let valid = userId.getAttribute('aria-invalid');
+			    if (valid === 'true' || valid === undefined) {
+					alert("아이디는 5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.");
+					userId.focus();
+					return false;
+					
+				} else {
+					
+					let userIdVal = userId.value;
+					
+				    let xhr = new XMLHttpRequest();
+				    
+				    xhr.onreadystatechange = function () {
+				    	if (xhr.readyState === XMLHttpRequest.DONE) {
+			            	if (xhr.status === 200) {
+								if (xhr.responseText === 'Y') {
+									idVaild = true;
+									userId.setAttribute("readonly", "readonly");
+									idDuplChkBtn.setAttribute("disabled", "disabled");
+									alert("사용 가능한 아이디입니다.");
+								} else {
+									alert("이미 존재하는 아이디입니다.");
+								}
+				            } else {
+								alert("ERROR : " + xhr.responseText);
+				            }
+				        }
+				    }
+				    
+				    xhr.open("GET", '/join/dupl-check/' + userIdVal, true);
+				    
+				    xhr.send();
+				}
+				
+			}
+	   	});
+	   	
+		// 로그인 요청 전 입력 값 유효성 체크
+		function joinValidation() {
+			
+			let userIdVal = userId.value.trim();
+			let pwdVal = pwd.value.trim();
+			let pwdChkVal = pwdChk.value.trim();
+			let nameVal = name.value.trim();
+			let nicknameVal = nickname.value.trim();
+			let phoneVal = phone.value.trim();
+			let birthdayVal = birthday.value.trim();
+			let emailVal = email.value;
+			
+			if (isEmpty(userIdVal)) {
+				alert("아이디를 입력해 주세요.");
+				userId.focus();
+				return false;
+			}
+			
+			if (!idVaild) {
+				alert("아이디 중복확인을 해주세요");
+				userId.focus();
+				return false;
+			}
+			
+			if (isEmpty(pwdVal)) {
+				alert("패스워드를 입력해 주세요.");
+				pwd.focus();	
+				return false;
+			}
+			
+			if (!inputRegex(pwdVal, 'pwd')) {
+				alert("패스워드는 8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해 주세요.");
+				pwd.focus();
+				return false;
+			}
+			
+			if (pwdVal !== pwdChkVal) {
+				alert("패스워드가 일치하지 않습니다.");
+				pwd.focus();
+				return false;
+			}
+			
+			if (isEmpty(nameVal)) {
+				alert("이름을 입력해 주세요.");
+				name.focus();	
+				return false;
+			}
+		
+			if (isEmpty(nicknameVal)) {
+				alert("닉네임을 입력해 주세요.");
+				nickname.focus();	
+				return false;
+			}
+			
+			if (isEmpty(phoneVal)) {
+				alert("연락처를 입력해 주세요.");
+				phone.focus();	
+				return false;
+			}
+	
+			if (isEmpty(birthdayVal)) {
+				alert("생년월일 입력해 주세요.");
+				birthday.focus();	
+				return false;
+			}
+			
+			if (isEmpty(emailVal)) {
+				alert("이메일을 입력해 주세요.");
+				email.focus();	
+				return false;
+			}
+			
+			if (!inputRegex(emailVal, 'email')) {
+				alert("이메일 주소 형식이 올바른지 확인해 주세요.");
+				email.focus();
+				return false;
+			}
+			
+			return true;
+		}
+	   
+	});
+	
+</script>
+</th:block>
+</html>

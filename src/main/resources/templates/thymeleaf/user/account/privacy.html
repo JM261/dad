@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{thymeleaf/fragments/layout_default}">
+<th:block layout:fragment="contents">
+
+	<div class="container">
+		
+		<h3>설정</h3>
+		
+		<form id="updateForm" th:object="${updateForm}">
+			<div class="grid">
+				<label>
+					<input type="text" th:field="*{username}" placeholder="아이디" maxlength="30" disabled="disabled">
+				</label>
+		  	</div>
+		  	<div>
+				<input type="text" th:field="*{name}" placeholder="이름" maxlength="10">
+		  	</div>
+		  	<div>
+				<input type="text" th:field="*{nickname}" placeholder="닉네임" maxlength="25">
+		  	</div>
+		  	<div>
+				<input type="text" th:field="*{phone}" oninput="onlyNumber(this)" placeholder="연락처 ex) 01012345678" maxlength="15">
+		  	</div>
+		  	<div>
+				 <input type="text" th:field="*{birthday}" oninput="onlyNumber(this)" placeholder="생년월일 ex) 19911231" maxlength="10"> 
+		  	</div>
+		  	<div>
+				<input type="text" th:field="*{email}" placeholder="이메일" maxlength="200">
+		  	</div>
+			
+			<div class="grid">
+			  	<button type="button" id="updateInfoExecBtn">수정하기</button>
+			  	<button type="button" id="updatePwdModalBtn" onclick="updatePwdModalControl(true)">패스워드 변경</button>
+			</div>
+		</form>
+	</div>
+	
+	<dialog id="updatePwdModal">
+		  <article>
+		    <h2>패스워드 변경</h2>
+			<form id="pwdForm">
+			    <ul>
+			      <li><input type="password" id="ogPwd" name="ogPwd" placeholder="기존 패스워드" maxlength="20"></li>
+			      <li><input type="password" id="newPwd" name="newPwd" placeholder="변경 패스워드" maxlength="20"></li>
+			      <li><input type="password" id="newPwdChk" name="newPwdChk" placeholder="변경 패스워드 확인" maxlength="20"></li>
+			    </ul>
+			</form>
+		    <footer>
+		      <button onclick="updatePwdModalControl()">취소</button>
+		      <button id="updatePwdExecBtn">패스워드 변경하기</button>
+		    </footer>
+		  </article>
+	</dialog>
+	
+</th:block>
+<th:block layout:fragment="js">
+<script th:inline="javascript">
+	
+	document.addEventListener('DOMContentLoaded', function () {
+
+		const updateInfoExecBtn = document.getElementById('updateInfoExecBtn'); // 수정하기 버튼
+		const updatePwdModalBtn = document.getElementById('updatePwdModalBtn'); // 패스워드 변경 Modal open 버튼
+		const updatePwdModalCancelBtn = document.getElementById('updatePwdModalCancelBtn'); // 패스워드 변경 Modal 취소 버튼
+		const updatePwdExecBtn = document.getElementById('updatePwdExecBtn'); // 패스워드 변경 실행 버튼
+		
+		const userId = document.getElementById('username');
+		const name = document.getElementById('name');
+		const nickname = document.getElementById('nickname');
+		const phone = document.getElementById('phone');
+		const birthday = document.getElementById('birthday');
+		const email = document.getElementById('email');
+		
+		const ogPwd = document.getElementById('ogPwd');
+		const newPwd = document.getElementById('newPwd');
+		const newPwdChk = document.getElementById('newPwdChk');
+		
+		updateInfoExecBtn.addEventListener('click', function () {
+			
+			if (updateValidation()) {
+				
+				let form = document.getElementById('updateForm');
+				 
+				let formData = new FormData(form);
+				
+				fetch('/privacy', {
+					method: 'PUT',
+					body : formData
+				})
+				.then(response => {
+			  		if (response.ok) {
+				    	location.reload();
+				    	alert("수정되었습니다.");
+				  	} else {
+				    	return response.text().then(errorMsg => {
+				      		alert(errorMsg);
+					    });
+				  	}
+				})
+				.catch(error => {
+			  		console.error('Fetch Error:', error);
+				});
+			}
+		});
+		
+		updatePwdExecBtn.addEventListener('click', function () {
+			
+			if (pwdValidation()) {
+				
+				let form = document.getElementById('pwdForm');
+				 
+				let formData = new FormData(form);
+				
+				fetch('/privacy', {
+					method: 'POST',
+					body : formData
+				})
+				.then(response => {
+			  		if (response.ok) {
+				    	location.reload();
+				    	alert("변경되었습니다.");
+				  	} else {
+				    	return response.text().then(errorMsg => {
+				      		alert(errorMsg);
+					    });
+				  	}
+				})
+				.catch(error => {
+			  		console.error('Fetch Error:', error);
+				});
+			} else {
+				updatePwdModalControl(true);
+			}
+		});
+		
+		// 로그인 요청 전 입력 값 유효성 체크
+		function updateValidation() {
+			
+			let nameVal = name.value.trim();
+			let nicknameVal = nickname.value.trim();
+			let phoneVal = phone.value.trim();
+			let birthdayVal = birthday.value.trim();
+			let emailVal = email.value;
+			
+			if (isEmpty(nameVal)) {
+				alert("이름을 입력해 주세요.");
+				name.focus();	
+				return false;
+			}
+		
+			if (isEmpty(nicknameVal)) {
+				alert("닉네임을 입력해 주세요.");
+				nickname.focus();	
+				return false;
+			}
+			
+			if (isEmpty(phoneVal)) {
+				alert("연락처를 입력해 주세요.");
+				phone.focus();	
+				return false;
+			}
+	
+			if (isEmpty(birthdayVal)) {
+				alert("생년월일 입력해 주세요.");
+				birthday.focus();	
+				return false;
+			}
+			
+			if (isEmpty(emailVal)) {
+				alert("이메일을 입력해 주세요.");
+				email.focus();	
+				return false;
+			}
+			
+			if (!inputRegex(emailVal, 'email')) {
+				alert("이메일 주소 형식이 올바른지 확인해 주세요.");
+				email.focus();
+				return false;
+			}
+			
+			return true;
+		}
+		
+		function pwdValidation() {
+			
+			let ogPwdVal = ogPwd.value.trim();
+			let newPwdVal = newPwd.value.trim();
+			let newPwdChkVal = newPwdChk.value.trim();
+			
+			if (isEmpty(ogPwdVal)) {
+				alert("기존 패스워드를 입력해 주세요.");
+				return false;
+			}
+			
+			if (isEmpty(newPwdVal)) {
+				alert("변경 패스워드를 입력해 주세요.");
+				return false;
+			}
+			
+			if (!inputRegex(newPwdVal, 'pwd')) {
+				alert("패스워드는 8~16자의 영문 대/소문자, 숫자, 특수문자를 사용해 주세요.");
+				return false;
+			}
+			
+			if (newPwdVal !== newPwdChkVal) {
+				alert("변경 패스워드가 일치하지 않습니다.");
+				return false;
+			}
+			
+			return true;
+	   	}
+	});
+	
+	function updatePwdModalControl(status = false) {
+		
+		let updatePwdModal = document.getElementById('updatePwdModal');
+		
+		if (status) {
+			updatePwdModal.setAttribute('open', '');
+		} else {
+			updatePwdModal.removeAttribute('open');
+		}
+	}	
+	
+</script>
+</th:block>
+</html>

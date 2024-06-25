@@ -42,19 +42,20 @@ public class SecurityConfig {
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(basic -> basic.disable())
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests()
-                .antMatchers("/common/**", "/login/**", "/join/**", "/logout", "/favicon.ico").permitAll()
-                .anyRequest().authenticated()
-                .and()
+                .authorizeHttpRequests(
+                        authorize -> authorize
+                                .requestMatchers("/common/**", "/login/**", "/join/**", "/logout", "/favicon.ico").permitAll()
+                                .anyRequest().authenticated()
+                )
                 .addFilterBefore(new JwtAuthFilter(jwtTokenProvider, redisService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(handling -> handling
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint()))
+                      .authenticationEntryPoint(jwtAuthenticationEntryPoint()))
                 .build();
     }
     
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-        		.antMatchers("/common/**", "/login/**", "/join/**", "/logout", "/favicon.ico");
+        		.requestMatchers("/common/**", "/login/**", "/join/**", "/logout", "/favicon.ico");
     }    
 }

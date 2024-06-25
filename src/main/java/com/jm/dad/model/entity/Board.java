@@ -3,10 +3,8 @@ package com.jm.dad.model.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Getter

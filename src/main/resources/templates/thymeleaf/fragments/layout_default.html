@@ -29,9 +29,9 @@
 	</script>
 	<!-- contents -->
 	<div class="wrapper" th:classappend="${classType}">
-		<th:block th:replace="thymeleaf/fragments/layout_top :: topFragment"></th:block>
+		<th:block th:replace="~{thymeleaf/fragments/layout_top :: topFragment}"></th:block>
 		<th:block layout:fragment="contents"></th:block>
-		<th:block th:replace="thymeleaf/fragments/layout_footer :: footerFragment"></th:block>
+		<th:block th:replace="~{thymeleaf/fragments/layout_footer :: footerFragment}"></th:block>
 	</div>
 	<!-- //container -->
 	<th:block layout:fragment="js">
